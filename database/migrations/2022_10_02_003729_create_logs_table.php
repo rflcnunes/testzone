@@ -18,7 +18,9 @@ return new class extends Migration
             $table->string('message');
             $table->string('action');
             $table->string('user_id');
-            $table->json('payload');
+            $table->string('offer_id');
+            $table->string('auction_id');
+            $table->json('payload')->nullable();
             $table->timestamps();
         });
     }

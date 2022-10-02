@@ -13,6 +13,8 @@ class Log extends Model
         'message',
         'action',
         'user_id',
+        'offer_id',
+        'auction_id',
         'payload'
     ];
 }

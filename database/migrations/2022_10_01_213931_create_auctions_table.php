@@ -22,6 +22,7 @@ return new class extends Migration
             $table->dateTime('start_date');
             $table->boolean('is_finished')->default(0);
             $table->dateTime('end_date')->nullable();
+            $table->integer('winner_id')->nullable();
             $table->timestamps();
         });
     }

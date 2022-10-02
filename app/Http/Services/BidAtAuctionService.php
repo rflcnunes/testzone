@@ -22,11 +22,32 @@ class BidAtAuctionService
         $this->auctionRepository = $auctionRepository;
     }
 
+    public function createOffer($value, $user_id, $auction_id)
+    {
+        $offer = $this->offerRepository->create([
+            'value' => $value,
+        ]);
+
+        $this->bidAtAuction($offer->id, $user_id, $auction_id);
+    }
+
     public function bidAtAuction($offerId, $userId, $auctionId)
     {
         $this->offerRepository->attachUserToOffer($userId, $offerId);
         $this->sumOfferToTotalAuctionValue($offerId, $auctionId);
-        $this->logRepository->store('User bid at auction', 'bid', $userId, $offerId);
+
+        $payload = [
+            'offer_id' => $offerId,
+            'user_id' => $userId,
+            'auction_id' => $auctionId,
+            'offer_value' => $this->offerRepository->getOfferById($offerId)->value
+        ];
+
+        $message = 'User ' . $userId . ' made a bid on auction ' . $auctionId . ' with offer ' . $offerId;
+        $action = 'bid';
+        $payload = json_encode($payload);
+
+        $this->logRepository->store($message, $action, $userId, $offerId, $auctionId, $payload);
     }
 
     public function sumOfferToTotalAuctionValue($offerId, $auctionId)

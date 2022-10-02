@@ -16,12 +16,24 @@ class OfferRepository implements OfferRepositoryInterface
 
     public function create(array $data)
     {
-        $this->offer->create($data);
+        return $this->offer->create($data);
+    }
+
+    public function getAll()
+    {
+        return $this->offer->all();
     }
 
     public function getOfferById($id)
     {
         return $this->offer->find($id);
+    }
+
+    public function getOfferWithGreaterValue()
+    {
+        $offers = $this->getAll();
+
+        return $offers->sortByDesc('value')->first();
     }
 
     public function attachUserToOffer($user_id, $offer_id)

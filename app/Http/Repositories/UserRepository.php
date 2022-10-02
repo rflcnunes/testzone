@@ -19,6 +19,11 @@ class UserRepository implements UserRepositoryInterface
         return $this->user->all();
     }
 
+    public function getUserById($id)
+    {
+        return $this->user->find($id);
+    }
+
     public function attachUserToOffer($user_id, $offer_id)
     {
         $this->user->find($user_id)->offer()->attach($offer_id);

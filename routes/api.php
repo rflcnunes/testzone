@@ -24,3 +24,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/offer', [OfferController::class, 'store']);
 Route::get('/offer', [OfferController::class, 'all']);
 
+Route::prefix('user')->group(function () {
+    Route::post('bid', [UserController::class, 'bidAtAuction']);
+});
+
