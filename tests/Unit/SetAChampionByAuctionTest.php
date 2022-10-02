@@ -16,6 +16,8 @@ use App\Models\Auction;
 use App\Models\Offer;
 use App\Models\User;
 
+use App\Http\Services\Blocs\ChampionBloc;
+
 class SetAChampionByAuctionTest extends TestCase
 {
     use DatabaseMigrations;
@@ -32,6 +34,8 @@ class SetAChampionByAuctionTest extends TestCase
     private $bidService;
 
     private $auctionLog;
+
+    private $championBloc;
 
     public function setUp(): void
     {
@@ -104,9 +108,20 @@ class SetAChampionByAuctionTest extends TestCase
 
     public function test_create_champion_bloc()
     {
+        $offerValue = $this->offerWithGreaterValue->value;
+        $offerId = $this->offerWithGreaterValue->id;
+
         $this->assertDatabaseHas('logs', [
             'auction_id' => 1,
             'payload->winner_id' => $this->user->id,
         ]);
+
+        $this->championBloc = app(ChampionBloc::class);
+        $bloc = $this->championBloc->setChampion($this->user, $offerValue, $this->offerWithGreaterValue);
+
+        $nameUser = $this->user->name;
+        $this->assertContains($nameUser, $bloc['champion']);
+
+        dump($bloc);
     }
 }
